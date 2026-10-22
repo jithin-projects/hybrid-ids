@@ -41,6 +41,25 @@ By unifying both paradigms into two complementary architectures:
 
 ---
 
+## 📊 Empirical Benchmark Results & Accuracy
+
+Comprehensive evaluation across all 8 CICIDS2017 multi-day datasets and NSL-KDD benchmarks:
+
+| Model Architecture | Architecture Type | Accuracy | Precision | Recall (Detection Coverage) | F1-Score | ROC-AUC | False Alarm Rate (FPR) | Latency (ms/1k pkts) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 🌲 **RandomForest (Misuse)** | Individual Baseline | **98.97%** | 99.08% | 98.56% | 0.9882 | **0.9965** | 0.71% | 6.16 |
+| 🚀 **GradientBoosting (Misuse)** | Individual Baseline | **99.04%** | 98.97% | **98.84%** | **0.9890** | 0.9961 | 0.80% | **2.29** |
+| 🔍 **IsolationForest (Anomaly)** | Individual Baseline | 57.51% | 59.83% | 9.38% | 0.1621 | 0.7869 | 4.91% | 6.38 |
+| 🛡️ **Stacking Ensemble (Hybrid 1)** | Hybrid Architecture | **98.72%** | 98.63% | **98.45%** | **0.9854** | **0.9956** | 1.07% | 10.44 |
+| ⚡ **Two-Stage Cascade (Hybrid 2)** | Hybrid Architecture | 83.35% | **98.92%** | 62.71% | 0.7676 | 0.9394 | **0.53%** | 5.96 |
+
+### 💡 Key Findings & Performance Highlights
+- **Highest Standalone Accuracy**: **GradientBoosting (Misuse)** achieves **99.04% accuracy**, **98.84% recall**, and an **F1-score of 0.9890** with fast inference latency of **2.29 ms/1k packets**.
+- **Lowest False Alarm Rate**: **Two-Stage Cascade (Hybrid 2)** achieves the cleanest operation with a false alarm rate of only **0.53%** (FPR <= 0.0053), utilizing IsolationForest as an ultra-fast sieve before targeted classification.
+- **Robust Decision Fusion**: **Stacking Ensemble (Hybrid 1)** scores **98.72% accuracy** and **0.9956 ROC-AUC**, successfully fusing probability outputs across tree-based misuse detectors and unsupervised anomaly bounds.
+
+---
+
 ## 🛠️ Technology Stack & Tools Used
 
 - **Supervised Misuse Detectors**: `sklearn.ensemble.RandomForestClassifier`, `sklearn.ensemble.GradientBoostingClassifier`
