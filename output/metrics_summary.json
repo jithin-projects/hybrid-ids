@@ -1,0 +1,72 @@
+[
+  {
+    "Model": "RandomForest (Misuse)",
+    "Architecture Type": "Individual Baseline",
+    "Accuracy": 0.9897,
+    "Precision": 0.9908277917908737,
+    "Recall (Coverage)": 0.9856295620437956,
+    "F1-Score": 0.9882218410520297,
+    "Weighted F1": 0.9896969793286713,
+    "ROC-AUC": 0.9965399424155695,
+    "PR-AUC (Avg Prec)": 0.9941497037671593,
+    "False Alarm Rate (FPR)": 0.007122507122507123,
+    "Miss Rate (FNR)": 0.01437043795620438,
+    "Latency (ms/1k pkts)": 6.155920028686523
+  },
+  {
+    "Model": "GradientBoosting (Misuse)",
+    "Architecture Type": "Individual Baseline",
+    "Accuracy": 0.9904,
+    "Precision": 0.9897213339424394,
+    "Recall (Coverage)": 0.9883667883211679,
+    "F1-Score": 0.9890435973522027,
+    "Weighted F1": 0.9903992758127883,
+    "ROC-AUC": 0.9960504122086009,
+    "PR-AUC (Avg Prec)": 0.9932887967769393,
+    "False Alarm Rate (FPR)": 0.008012820512820512,
+    "Miss Rate (FNR)": 0.011633211678832116,
+    "Latency (ms/1k pkts)": 2.294921875
+  },
+  {
+    "Model": "IsolationForest (Anomaly)",
+    "Architecture Type": "Individual Baseline",
+    "Accuracy": 0.5751,
+    "Precision": 0.5982532751091703,
+    "Recall (Coverage)": 0.09375,
+    "F1-Score": 0.16209820548215342,
+    "Weighted F1": 0.47282472139242554,
+    "ROC-AUC": 0.7869025761575373,
+    "PR-AUC (Avg Prec)": 0.6841471196503016,
+    "False Alarm Rate (FPR)": 0.049145299145299144,
+    "Miss Rate (FNR)": 0.90625,
+    "Latency (ms/1k pkts)": 6.38265609741211
+  },
+  {
+    "Model": "Stacking Ensemble (Hybrid 1)",
+    "Architecture Type": "Hybrid Architecture",
+    "Accuracy": 0.9872,
+    "Precision": 0.9862888482632541,
+    "Recall (Coverage)": 0.9844890510948905,
+    "F1-Score": 0.9853881278538813,
+    "Weighted F1": 0.9871987104112839,
+    "ROC-AUC": 0.9956173389182628,
+    "PR-AUC (Avg Prec)": 0.9932103750514817,
+    "False Alarm Rate (FPR)": 0.010683760683760684,
+    "Miss Rate (FNR)": 0.01551094890510949,
+    "Latency (ms/1k pkts)": 10.436105728149414
+  },
+  {
+    "Model": "Two-Stage Cascade (Hybrid 2)",
+    "Architecture Type": "Hybrid Architecture",
+    "Accuracy": 0.8335,
+    "Precision": 0.9892047499100396,
+    "Recall (Coverage)": 0.6270529197080292,
+    "F1-Score": 0.7675554935083065,
+    "Weighted F1": 0.8252550102890731,
+    "ROC-AUC": 0.9394091576530559,
+    "PR-AUC (Avg Prec)": 0.9294894724955337,
+    "False Alarm Rate (FPR)": 0.005341880341880342,
+    "Miss Rate (FNR)": 0.3729470802919708,
+    "Latency (ms/1k pkts)": 5.957245826721191
+  }
+]

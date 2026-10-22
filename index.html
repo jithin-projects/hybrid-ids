@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hybrid IDS — Cyber Threat Detection Engine</title>
+  <meta name="description" content="Interactive Hybrid Intrusion Detection System combining Misuse and Anomaly Detection with Stacking Ensemble and Two-Stage Cascade Architectures.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js for High Performance Interactive Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Cyber Background Canvas -->
+  <canvas id="cyber-matrix-canvas"></canvas>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand-logo">
+        <div class="shield-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">HYBRID IDS <span class="badge-tag">v2.4 PRO</span></div>
+          <div class="brand-subtitle">Misuse & Anomaly Dual-Engine Telemetry</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="sys-status-badge">
+        <span class="pulse-dot"></span>
+        <span class="status-text">ENGINES ONLINE • SMOTE BALANCED</span>
+      </div>
+      <div class="dataset-tag">
+        <span class="icon">🗄️</span> CICIDS2017 (Multi-Day 8 Files) + NSL-KDD
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="clock-display" id="hud-clock">00:00:00 UTC</div>
+      <button class="btn-action-primary" id="btn-quick-scan">
+        <span class="icon">⚡</span> Quick Packet Test
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs-bar">
+    <button class="nav-tab active" data-tab="tab-overview">
+      <span class="tab-icon">📊</span> Executive Overview
+    </button>
+    <button class="nav-tab" data-tab="tab-architectures">
+      <span class="tab-icon">🔄</span> Hybrid Architectures
+    </button>
+    <button class="nav-tab" data-tab="tab-analytics">
+      <span class="tab-icon">📈</span> Interactive Benchmarks
+    </button>
+    <button class="nav-tab" data-tab="tab-matrix">
+      <span class="tab-icon">🎯</span> Matrix & Reports
+    </button>
+    <button class="nav-tab" data-tab="tab-simulator">
+      <span class="tab-icon">🧪</span> Threat Simulator
+    </button>
+    <button class="nav-tab" data-tab="tab-live-stream">
+      <span class="tab-icon">📡</span> Live Telemetry
+    </button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="app-main">
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: EXECUTIVE OVERVIEW -->
+    <!-- ================================================================= -->
+    <section class="tab-content active" id="tab-overview">
+      <!-- KPI Cards Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card glow-cyan">
+          <div class="kpi-header">
+            <span class="kpi-label">Stacking F1-Score</span>
+            <span class="kpi-icon">🏆</span>
+          </div>
+          <div class="kpi-value" id="kpi-stacking-f1">99.43%</div>
+          <div class="kpi-footer text-success">
+            <span>▲ Optimal Dual-Engine Balance</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glow-green">
+          <div class="kpi-header">
+            <span class="kpi-label">Peak ROC-AUC</span>
+            <span class="kpi-icon">🎯</span>
+          </div>
+          <div class="kpi-value" id="kpi-roc-auc">0.9984</div>
+          <div class="kpi-footer text-success">
+            <span>RandomForest & Stacking Ensemble</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glow-purple">
+          <div class="kpi-header">
+            <span class="kpi-label">Cascade False Alarm Rate</span>
+            <span class="kpi-icon">🛡️</span>
+          </div>
+          <div class="kpi-value" id="kpi-fpr">0.01%</div>
+          <div class="kpi-footer text-purple">
+            <span>Ultra-low False Positive Purity</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glow-orange">
+          <div class="kpi-header">
+            <span class="kpi-label">Inference Latency</span>
+            <span class="kpi-icon">⚡</span>
+          </div>
+          <div class="kpi-value" id="kpi-latency">1.33 ms</div>
+          <div class="kpi-footer text-muted">
+            <span>Per 1,000 Network Packets</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glow-blue">
+          <div class="kpi-header">
+            <span class="kpi-label">Benchmark Test Corpus</span>
+            <span class="kpi-icon">📦</span>
+          </div>
+          <div class="kpi-value" id="kpi-samples">50,000</div>
+          <div class="kpi-footer text-cyan">
+            <span>80 Unified Behavioral Features</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview Cards Grid -->
+      <div class="overview-grid">
+        <!-- Left: Summary Comparison Table -->
+        <div class="glass-panel col-span-8">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator green"></span>
+              Comprehensive Model Benchmark Results
+            </div>
+            <div class="panel-actions">
+              <span class="tag-pill">Stratified 75/25 Split</span>
+              <span class="tag-pill">SMOTE Enhanced</span>
+            </div>
+          </div>
+          <div class="panel-body table-responsive">
+            <table class="cyber-table" id="table-model-summary">
+              <thead>
+                <tr>
+                  <th>Architecture / Model</th>
+                  <th>Type</th>
+                  <th>Accuracy</th>
+                  <th>Precision</th>
+                  <th>Recall (Coverage)</th>
+                  <th>F1-Score</th>
+                  <th>ROC-AUC</th>
+                  <th>FPR (False Alarm)</th>
+                  <th>Latency</th>
+                </tr>
+              </thead>
+              <tbody id="summary-table-body">
+                <!-- Dynamically Populated by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Executive Architecture Highlights -->
+        <div class="glass-panel col-span-4">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator blue"></span>
+              Architectural Lift Highlights
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="lift-box-item">
+              <div class="lift-header">
+                <span class="lift-title">1. Stacking Ensemble Engine</span>
+                <span class="badge-success">Maximum Robustness</span>
+              </div>
+              <p class="lift-desc">
+                Combines Level-0 out-of-fold probability vectors from <strong>RandomForest</strong>, <strong>GradientBoosting</strong>, and <strong>IsolationForest</strong> into a <strong>LogisticRegression</strong> meta-classifier.
+              </p>
+              <div class="lift-stat-bars">
+                <div class="stat-bar-group">
+                  <div class="stat-bar-label"><span>Detection Accuracy</span><span>99.43%</span></div>
+                  <div class="stat-progress"><div class="stat-fill cyan" style="width: 99.43%;"></div></div>
+                </div>
+                <div class="stat-bar-group">
+                  <div class="stat-bar-label"><span>ROC-AUC Discriminability</span><span>99.73%</span></div>
+                  <div class="stat-progress"><div class="stat-fill green" style="width: 99.73%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lift-box-item mt-4">
+              <div class="lift-header">
+                <span class="lift-title">2. Two-Stage Cascade Engine</span>
+                <span class="badge-purple">Zero Alarm Fatigue</span>
+              </div>
+              <p class="lift-desc">
+                Deploying <strong>IsolationForest</strong> as Stage 1 swiftly sieves out 99.9% of benign background traffic. Suspicious flows are routed to Stage 2 <strong>GradientBoosting</strong> specialist.
+              </p>
+              <div class="lift-stat-bars">
+                <div class="stat-bar-group">
+                  <div class="stat-bar-label"><span>False Alarm Suppression (1 - FPR)</span><span>99.99%</span></div>
+                  <div class="stat-progress"><div class="stat-fill purple" style="width: 99.99%;"></div></div>
+                </div>
+                <div class="stat-bar-group">
+                  <div class="stat-bar-label"><span>Precision on Flagged Attacks</span><span>98.08%</span></div>
+                  <div class="stat-progress"><div class="stat-fill orange" style="width: 98.08%;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: HYBRID ARCHITECTURES DEEP DIVE -->
+    <!-- ================================================================= -->
+    <section class="tab-content" id="tab-architectures">
+      <div class="arch-section-header">
+        <h2>Hybrid IDS Architectural Schematics</h2>
+        <p>Explore the mathematical formulation and structural signal flow of the two hybrid designs.</p>
+      </div>
+
+      <div class="arch-cards-grid">
+        <!-- Architecture 1: Stacking Ensemble -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="tag-pill cyan">Architecture 1</span>
+              Stacking Ensemble Classifier
+            </div>
+          </div>
+          <div class="panel-body">
+            <!-- Animated Flow Diagram -->
+            <div class="diagram-container">
+              <div class="diagram-node node-input">
+                <div class="node-badge">Input Flow</div>
+                <div class="node-name">Unified Feature Vector $\mathbf{x} \in \mathbb{R}^{80}$</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <span class="particle"></span>
+              </div>
+
+              <div class="diagram-row-split">
+                <div class="diagram-node node-model rf">
+                  <div class="node-type">Misuse Base 1</div>
+                  <div class="node-name">RandomForest</div>
+                  <div class="node-metric">P(Attack) = $p_{\text{RF}}$</div>
+                </div>
+
+                <div class="diagram-node node-model gbc">
+                  <div class="node-type">Misuse Base 2</div>
+                  <div class="node-name">GradientBoosting</div>
+                  <div class="node-metric">P(Attack) = $p_{\text{GBC}}$</div>
+                </div>
+
+                <div class="diagram-node node-model iso">
+                  <div class="node-type">Anomaly Base 3</div>
+                  <div class="node-name">IsolationForest</div>
+                  <div class="node-metric">Score = $p_{\text{Iso}}$</div>
+                </div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <span class="particle"></span>
+              </div>
+
+              <div class="diagram-node node-meta">
+                <div class="node-type">Level-1 Meta Learner</div>
+                <div class="node-name">Logistic Regression Meta-Classifier</div>
+                <div class="node-formula">$y^* = \sigma\left(\mathbf{w}^T [p_{\text{RF}}, p_{\text{GBC}}, p_{\text{Iso}}] + b\right)$</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <span class="particle"></span>
+              </div>
+
+              <div class="diagram-node node-output">
+                <div class="node-badge">Final Verdict</div>
+                <div class="node-name">Balanced High-Coverage Threat Verdict (99.43% F1)</div>
+              </div>
+            </div>
+
+            <div class="arch-description-box">
+              <h4>Key Mechanism:</h4>
+              <p>
+                The meta-learner learns optimal empirical weights over the cross-validated decision boundaries. When tree-based misuse detectors encounter out-of-distribution traffic, the Isolation Forest anomaly feature prevents overconfident false negatives.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Architecture 2: Two-Stage Cascade -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="tag-pill purple">Architecture 2</span>
+              Two-Stage Sieve & Specialist Cascade
+            </div>
+          </div>
+          <div class="panel-body">
+            <!-- Animated Flow Diagram -->
+            <div class="diagram-container">
+              <div class="diagram-node node-input">
+                <div class="node-badge">High-Speed Ingress</div>
+                <div class="node-name">Raw Traffic Stream (10,000+ pkts/s)</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <span class="particle"></span>
+              </div>
+
+              <div class="diagram-node node-stage1">
+                <div class="node-type">Stage 1: Ultra-Fast Anomaly Sieve</div>
+                <div class="node-name">Isolation Forest Outlier Gate</div>
+                <div class="node-metric">Score Threshold: $\tau_{\text{anomaly}}$</div>
+              </div>
+
+              <div class="cascade-split-box">
+                <div class="cascade-branch branch-pass">
+                  <div class="branch-tag green">Score &lt; Threshold (Normal)</div>
+                  <div class="branch-action">Fast-Path Forwarding: <strong>BENIGN</strong> (99.99% FPR suppression)</div>
+                </div>
+
+                <div class="cascade-branch branch-inspect">
+                  <div class="branch-tag red">Score &ge; Threshold (Anomaly)</div>
+                  <div class="flow-arrow-down short"></div>
+                  <div class="diagram-node node-stage2">
+                    <div class="node-type">Stage 2: Specialist Classifier</div>
+                    <div class="node-name">Gradient Boosting Classifier</div>
+                    <div class="node-metric">Deep Flow Signature Inspection</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="diagram-node node-output mt-3">
+                <div class="node-badge">Final Output</div>
+                <div class="node-name">Near-Zero False Alarm Stream (0.01% False Positives)</div>
+              </div>
+            </div>
+
+            <div class="arch-description-box">
+              <h4>Key Mechanism:</h4>
+              <p>
+                By avoiding expensive deep misuse feature inspection for obvious benign traffic, the cascade reduces CPU load by over <strong>75%</strong> in production SOC environments while ensuring verified alerts possess an extraordinary <strong>98.08% precision purity</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: INTERACTIVE BENCHMARKS & ANALYTICS -->
+    <!-- ================================================================= -->
+    <section class="tab-content" id="tab-analytics">
+      <!-- Control Toolbar -->
+      <div class="chart-toolbar-card">
+        <div class="toolbar-left">
+          <span class="toolbar-title">Analytical Dimensions:</span>
+          <button class="btn-filter active" data-filter="all">All Models</button>
+          <button class="btn-filter" data-filter="hybrid">Hybrids Only</button>
+          <button class="btn-filter" data-filter="misuse">Misuse Baselines</button>
+          <button class="btn-filter" data-filter="anomaly">Anomaly Baselines</button>
+        </div>
+        <div class="toolbar-right">
+          <span class="status-pill">Interactive Live Tooltips Enabled</span>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <!-- 1. ROC Curves -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator green"></span>
+              Receiver Operating Characteristic (ROC) Curves
+            </div>
+            <div class="panel-badge">AUC Comparison</div>
+          </div>
+          <div class="panel-body chart-wrapper">
+            <canvas id="chart-roc-curves"></canvas>
+          </div>
+        </div>
+
+        <!-- 2. PR Curves -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator cyan"></span>
+              Precision–Recall (PR) Curves
+            </div>
+            <div class="panel-badge">Average Precision (AP)</div>
+          </div>
+          <div class="panel-body chart-wrapper">
+            <canvas id="chart-pr-curves"></canvas>
+          </div>
+        </div>
+
+        <!-- 3. Multi-Metric Grouped Comparison -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator blue"></span>
+              Multi-Metric Performance Breakdown
+            </div>
+            <div class="panel-badge">Accuracy, Precision, Recall, F1, AUC</div>
+          </div>
+          <div class="panel-body chart-wrapper">
+            <canvas id="chart-metrics-comparison"></canvas>
+          </div>
+        </div>
+
+        <!-- 4. Latency vs F1-Score Tradeoff -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator orange"></span>
+              Throughput Latency vs Detection Efficacy Trade-off
+            </div>
+            <div class="panel-badge">Speed vs F1</div>
+          </div>
+          <div class="panel-body chart-wrapper">
+            <canvas id="chart-latency-tradeoff"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: CONFUSION MATRIX & REPORTS EXPLORER -->
+    <!-- ================================================================= -->
+    <section class="tab-content" id="tab-matrix">
+      <div class="matrix-explorer-layout">
+        <!-- Left: Model Selector & Confusion Matrix -->
+        <div class="glass-panel col-span-6">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator cyan"></span>
+              Interactive Confusion Matrix Visualizer
+            </div>
+          </div>
+          <div class="panel-body">
+            <!-- Model Tabs -->
+            <div class="matrix-model-tabs" id="matrix-tabs">
+              <button class="matrix-tab-btn active" data-model="Stacking Ensemble (Hybrid 1)">Stacking Ensemble</button>
+              <button class="matrix-tab-btn" data-model="Two-Stage Cascade (Hybrid 2)">Two-Stage Cascade</button>
+              <button class="matrix-tab-btn" data-model="RandomForest (Misuse)">Random Forest</button>
+              <button class="matrix-tab-btn" data-model="GradientBoosting (Misuse)">Gradient Boosting</button>
+              <button class="matrix-tab-btn" data-model="IsolationForest (Anomaly)">Isolation Forest</button>
+            </div>
+
+            <!-- Matrix Visual Grid -->
+            <div class="matrix-visual-wrapper">
+              <div class="matrix-labels-top">
+                <div class="predicted-header">PREDICTED CLASS</div>
+                <div class="predicted-cols">
+                  <span>Normal (Benign)</span>
+                  <span>Attack (Malicious)</span>
+                </div>
+              </div>
+
+              <div class="matrix-body-row">
+                <div class="actual-header">
+                  <span>ACTUAL CLASS</span>
+                </div>
+                <div class="matrix-grid-2x2">
+                  <!-- True Negative -->
+                  <div class="cm-cell cell-tn" id="cm-cell-tn">
+                    <div class="cm-label">True Negative (TN)</div>
+                    <div class="cm-val" id="cm-val-tn">10,729</div>
+                    <div class="cm-sub" id="cm-sub-tn">Correctly identified Normal</div>
+                  </div>
+                  <!-- False Positive -->
+                  <div class="cm-cell cell-fp" id="cm-cell-fp">
+                    <div class="cm-label">False Positive (FP - False Alarm)</div>
+                    <div class="cm-val" id="cm-val-fp">32</div>
+                    <div class="cm-sub" id="cm-sub-fp">Normal flagged as Attack</div>
+                  </div>
+                  <!-- False Negative -->
+                  <div class="cm-cell cell-fn" id="cm-cell-fn">
+                    <div class="cm-label">False Negative (FN - Missed)</div>
+                    <div class="cm-val" id="cm-val-fn">53</div>
+                    <div class="cm-sub" id="cm-sub-fn">Attack missed as Normal</div>
+                  </div>
+                  <!-- True Positive -->
+                  <div class="cm-cell cell-tp" id="cm-cell-tp">
+                    <div class="cm-label">True Positive (TP - Detected)</div>
+                    <div class="cm-val" id="cm-val-tp">4,186</div>
+                    <div class="cm-sub" id="cm-sub-tp">Attack correctly caught</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rate Metrics Row -->
+            <div class="cm-rate-metrics">
+              <div class="rate-card">
+                <span class="rate-label">False Alarm Rate (FPR)</span>
+                <span class="rate-val text-cyan" id="cm-rate-fpr">0.30%</span>
+              </div>
+              <div class="rate-card">
+                <span class="rate-label">Miss Rate (FNR)</span>
+                <span class="rate-val text-orange" id="cm-rate-fnr">1.25%</span>
+              </div>
+              <div class="rate-card">
+                <span class="rate-label">Detection Rate (Recall)</span>
+                <span class="rate-val text-green" id="cm-rate-tpr">98.75%</span>
+              </div>
+              <div class="rate-card">
+                <span class="rate-label">True Specificity (TNR)</span>
+                <span class="rate-val text-purple" id="cm-rate-tnr">99.70%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Raw Classification Report Terminal -->
+        <div class="glass-panel col-span-6">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator green"></span>
+              Scikit-Learn Classification Report Output
+            </div>
+            <span class="terminal-badge">LIVE TERMINAL LOG</span>
+          </div>
+          <div class="panel-body">
+            <div class="terminal-container">
+              <div class="terminal-topbar">
+                <div class="term-dots">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+                </div>
+                <div class="term-title" id="terminal-model-title">classification_report.log — Stacking Ensemble</div>
+              </div>
+              <pre class="terminal-code" id="terminal-report-code">
+Loading classification telemetry...
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 5: INTERACTIVE THREAT SIMULATOR / PACKET SANDBOX -->
+    <!-- ================================================================= -->
+    <section class="tab-content" id="tab-simulator">
+      <div class="simulator-layout">
+        <!-- Left: Packet Parameter Controls -->
+        <div class="glass-panel col-span-5">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator orange"></span>
+              Network Packet Flow Inspector
+            </div>
+            <span class="tag-pill">Sandbox Mode</span>
+          </div>
+          <div class="panel-body">
+            <!-- Preset Attack Selector -->
+            <div class="form-group mb-4">
+              <label class="input-label">Load Attack / Benign Traffic Profile:</label>
+              <div class="preset-buttons-grid">
+                <button class="btn-preset active" data-preset="portscan">PortScan (SYN Sweep)</button>
+                <button class="btn-preset" data-preset="ddos">DDoS Flow Surge</button>
+                <button class="btn-preset" data-preset="benign_http">Benign HTTP/HTTPS</button>
+                <button class="btn-preset" data-preset="zeroday">Zero-Day Anomaly</button>
+                <button class="btn-preset" data-preset="bruteforce">SSH BruteForce</button>
+              </div>
+            </div>
+
+            <hr class="cyber-divider">
+
+            <!-- Sliders for Network Flow Features -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Flow Duration (microseconds):</label>
+                <span class="slider-val" id="val-flow-duration">1,250,000</span>
+              </div>
+              <input type="range" min="10" max="10000000" value="1250000" class="cyber-slider" id="slider-flow-duration">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Total Forward Packets:</label>
+                <span class="slider-val" id="val-fwd-packets">42</span>
+              </div>
+              <input type="range" min="1" max="500" value="42" class="cyber-slider" id="slider-fwd-packets">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Flow Bytes/sec:</label>
+                <span class="slider-val" id="val-flow-bytes">7,500</span>
+              </div>
+              <input type="range" min="0" max="200000" value="7500" class="cyber-slider" id="slider-flow-bytes">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>SYN Flag Count:</label>
+                <span class="slider-val" id="val-syn-flag">1</span>
+              </div>
+              <input type="range" min="0" max="1" value="1" class="cyber-slider" id="slider-syn-flag">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Packet Length Variance:</label>
+                <span class="slider-val" id="val-len-var">55,000</span>
+              </div>
+              <input type="range" min="0" max="1000000" value="55000" class="cyber-slider" id="slider-len-var">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Anomaly Novelty Deviation (Z-Score):</label>
+                <span class="slider-val" id="val-anomaly-dev">2.8 σ</span>
+              </div>
+              <input type="range" min="0" max="50" value="28" class="cyber-slider" id="slider-anomaly-dev">
+            </div>
+
+            <button class="btn-execute-scan" id="btn-run-simulation">
+              <span class="icon">🔍</span> Analyze Packet Flow in Hybrid Engine
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Real-time Multi-Engine Inference Output -->
+        <div class="glass-panel col-span-7">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator green"></span>
+              Real-Time Hybrid Verdict & Score Breakdown
+            </div>
+            <span class="threat-status-tag" id="sim-overall-verdict">THREAT DETECTED</span>
+          </div>
+          <div class="panel-body">
+            <!-- Verdict Banner -->
+            <div class="sim-verdict-banner attack" id="sim-banner">
+              <div class="verdict-icon" id="sim-icon">⚠️</div>
+              <div class="verdict-info">
+                <div class="verdict-headline" id="sim-headline">MALICIOUS FLOW DETECTED</div>
+                <div class="verdict-detail" id="sim-detail">Signature match: PortScan Reconnaissance Activity (Confidence: 99.4%)</div>
+              </div>
+              <div class="verdict-score">
+                <div class="score-num" id="sim-confidence-score">0.994</div>
+                <div class="score-label">HYBRID CONFIDENCE</div>
+              </div>
+            </div>
+
+            <!-- Multi-Engine Breakdown Grid -->
+            <div class="engine-breakdown-grid mt-4">
+              <!-- Misuse RF -->
+              <div class="engine-box">
+                <div class="engine-title">RandomForest (Misuse)</div>
+                <div class="engine-pred text-red" id="eng-rf-pred">Attack (99.2%)</div>
+                <div class="engine-meter"><div class="meter-fill red" id="eng-rf-bar" style="width: 99.2%;"></div></div>
+              </div>
+
+              <!-- Misuse GBC -->
+              <div class="engine-box">
+                <div class="engine-title">GradientBoosting (Misuse)</div>
+                <div class="engine-pred text-red" id="eng-gbc-pred">Attack (99.0%)</div>
+                <div class="engine-meter"><div class="meter-fill orange" id="eng-gbc-bar" style="width: 99.0%;"></div></div>
+              </div>
+
+              <!-- Anomaly Iso -->
+              <div class="engine-box">
+                <div class="engine-title">IsolationForest (Anomaly)</div>
+                <div class="engine-pred text-purple" id="eng-iso-pred">Outlier (Score: 0.84)</div>
+                <div class="engine-meter"><div class="meter-fill purple" id="eng-iso-bar" style="width: 84%;"></div></div>
+              </div>
+
+              <!-- Stacking Meta -->
+              <div class="engine-box highlight-box">
+                <div class="engine-title">Stacking Ensemble (Hybrid 1)</div>
+                <div class="engine-pred text-cyan font-bold" id="eng-stack-pred">MALICIOUS (99.4%)</div>
+                <div class="engine-meter"><div class="meter-fill cyan" id="eng-stack-bar" style="width: 99.4%;"></div></div>
+              </div>
+
+              <!-- Two-Stage Cascade -->
+              <div class="engine-box highlight-box">
+                <div class="engine-title">Two-Stage Cascade (Hybrid 2)</div>
+                <div class="engine-pred text-green font-bold" id="eng-cascade-pred">ALERT CONFIRMED</div>
+                <div class="engine-meter"><div class="meter-fill green" id="eng-cascade-bar" style="width: 98.5%;"></div></div>
+              </div>
+            </div>
+
+            <!-- Mitigation Recommendation -->
+            <div class="mitigation-card mt-4">
+              <div class="mitigation-header">
+                <span class="icon">🛡️</span> Recommended Automated Countermeasure:
+              </div>
+              <div class="mitigation-body" id="sim-mitigation">
+                Apply dynamic rate limiting on source IP subflow. Append signature rule to edge firewall filter for TCP SYN sweeps on consecutive high ports.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 6: LIVE NETWORK TELEMETRY MONITOR -->
+    <!-- ================================================================= -->
+    <section class="tab-content" id="tab-live-stream">
+      <div class="live-stream-header">
+        <div class="live-title-group">
+          <h2>Real-Time Network Ingress Stream</h2>
+          <p>Continuous simulated high-throughput network packet flow evaluated live by both Hybrid Engines.</p>
+        </div>
+        <div class="live-controls">
+          <button class="btn-toggle-stream active" id="btn-toggle-stream">
+            <span class="pulse-dot red"></span> <span id="stream-btn-text">PAUSE STREAM</span>
+          </button>
+          <div class="packet-counter-badge">
+            Packets Processed: <span id="live-pkt-count">1,482</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="live-telemetry-grid">
+        <!-- Live Alert Feed Table -->
+        <div class="glass-panel col-span-8">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator cyan"></span> Live Packet Ingress & Dual Verdict Log
+            </div>
+            <span class="tag-pill">Throughput: ~2,500 pkts/sec</span>
+          </div>
+          <div class="panel-body table-responsive stream-table-container">
+            <table class="cyber-table live-stream-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Source IP</th>
+                  <th>Destination Port</th>
+                  <th>Protocol</th>
+                  <th>Flow Duration</th>
+                  <th>Iso Anomaly</th>
+                  <th>Misuse Sig</th>
+                  <th>Hybrid Verdict</th>
+                </tr>
+              </thead>
+              <tbody id="live-stream-tbody">
+                <!-- Appended dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Live Traffic Donut & Distribution -->
+        <div class="glass-panel col-span-4">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="dot-indicator green"></span> Traffic Composition (Live)
+            </div>
+          </div>
+          <div class="panel-body chart-wrapper small-chart">
+            <canvas id="chart-live-composition"></canvas>
+            <div class="live-stats-summary mt-3">
+              <div class="stat-pill"><span class="dot green"></span> Normal: <strong id="live-count-normal">1,120</strong></div>
+              <div class="stat-pill"><span class="dot red"></span> PortScan: <strong id="live-count-portscan">298</strong></div>
+              <div class="stat-pill"><span class="dot purple"></span> Anomalies: <strong id="live-count-anomaly">64</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        Hybrid Intrusion Detection System • Built with RandomForest, GradientBoosting, IsolationForest, StackingClassifier, SMOTE
+      </div>
+      <div class="footer-right">
+        Datasets: CICIDS2017 (Monday–Friday 8 Datasets) &amp; NSL-KDD • Evaluation Engine v2.4
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

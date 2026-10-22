@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Caches and environments
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Large Datasets (>270MB CICIDS2017 parquet files)
+DATASET/
+*.parquet
+
+# Separate Practical 2 repository (already hosted at https://github.com/jithin-projects/anomaly-detector-bakeoff)
+practical 2/
+practical 2
